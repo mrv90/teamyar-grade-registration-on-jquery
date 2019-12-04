@@ -66,9 +66,7 @@
                     </div>
                 </div>
             </li>
-
-
-
+                       
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo11" aria-expanded="true" aria-controls="collapseTwo11">
@@ -107,12 +105,8 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -156,20 +150,13 @@
                                 <span class="fa fa-plus"></span>
                             </div>
                             <br />
-
                         </div>
-
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="example" width="100%" cellspacing="0"></table>
-                            </div>
-                       
-                       
-
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="example" width="100%" cellspacing="0"></table>
+                        </div>
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
-
             </div>
             <!-- End of Main Content -->
             <!-- Footer -->
@@ -232,40 +219,40 @@
     <!-- Page level custom scripts -->
     <script>
 
-        var aDemoItems = [
-            {
-                "student_id": 1,
-                "name": "ناصر",
-                "family_name": "علوی",
-                "birth_date": "10/16/2020",
-            },
-            {
-                "student_id": 2,
-                "name": "سپنتا",
-                "family_name": "شاهی",
-                "birth_date": "10/16/2020",
-            },];
+        //var aDemoItems = [
+        //    {
+        //        "student_id": 1,
+        //        "name": "ناصر",
+        //        "family_name": "علوی",
+        //        "birth_date": "10/16/2020",
+        //    },
+        //    {
+        //        "student_id": 2,
+        //        "name": "سپنتا",
+        //        "family_name": "شاهی",
+        //        "birth_date": "10/16/2020",
+        //    },];
 
         $(document).ready(function () {
             getDataFromServer();
         });
 
         function getDataFromServer() {
-            //$.ajax({
-            //    url: "/student",
-            //    type: "Get",
-            //    data: {},
-            //}).done(function (aDemoItems) {
-            //    aDemoItems.forEach(item => {
-            //        item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
-            //    });
-            //    loadTable(aDemoItems);
-            //});
-
-            aDemoItems.forEach(item => {
-                item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
+            $.ajax({
+                url: "https://my-json-server.typicode.com/mrv90/FakeApiServer/student",
+                type: "Get",
+                data: {},
+            }).done(function (aDemoItems) {
+                //aDemoItems.forEach(item => {
+                //    item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
+                //});
+                loadTable(aDemoItems);
             });
-            loadTable(aDemoItems);
+            
+            //aDemoItems.forEach(item => {
+            //    item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
+            //});
+            //loadTable(aDemoItems);
         }
 
         function loadTable(aDemoItems) {
@@ -293,44 +280,43 @@
                     {
                         "targets": -1,
                         "data": 1,
-                        "defaultContent": "<button id='btnEditRow' class='btnedit btn btn-success fas fa-edit'></button> <button id='btnDeleteRow' class='btndelete btn btn-danger fas fa-trash-alt'></button>"
+                        "defaultContent": "<button id='btnEditRow' class='btnedit btn btn-success fas fa-edit'></button> <button id='btnDeleteRow' class='btnDelete btn btn-danger fas fa-trash-alt'></button>"
                     }
                 ]
             });
 
             $('#example tbody').on('click', 'button[class*="btnedit"]', function () {
                 var data = table.row($(this).parents('tr')).data();
-                console.log(data);
 
                 $('#txtName').val(data.name);
                 $('#txtFamilyName').val(data.family_name);
                 $('#txtBirthDate').val(data.birth_date);
-                $('#btnsave').attr('idsave', data.student_id);
-                $('#txtBirthDate').persianDatepicker({
-                    observer: true,
-                    val: data.birth_date,
-                    format: 'YYYY/MM/DD',
-                    altField: '.observer-example-alt'
-                });
+                $('#btnSave').attr('idSave', data.student_id);
+                //$('#txtBirthDate').persianDatepicker({
+                //    observer: true,
+                //    val: data.birth_date,
+                //    format: 'YYYY/MM/DD',
+                //    altField: '.observer-example-alt'
+                //});
 
+                //console.log(data);
                 $('#modaledit').modal();
             });
 
-            $('#example tbody').on('click', 'button[class*="btndelete"]', function () {
+            $('#example tbody').on('click', 'button[class*="btnDelete"]', function () {
                 var data = table.row($(this).parents('tr')).data();
-                console.log(data);
-
                 $('#txtName').val(data.name);
                 $('#txtFamilyName').val(data.family_name);
                 $('#txtBirthDate').val(data.birth_date);
-                $('#btndelete').attr('iddelete', data.student_id);
-                $('#txtBirthDate').persianDatepicker({
-                    observer: true,
-                    val: data.birth_date,
-                    format: 'YYYY/MM/DD',
-                    altField: '.observer-example-alt'
-                });
+                $('#btnDelete').attr('idDelete', data.student_id);
+                //$('#txtBirthDate').persianDatepicker({
+                //    observer: true,
+                //    val: data.birth_date,
+                //    format: 'YYYY/MM/DD',
+                //    altField: '.observer-example-alt'
+                //});
 
+                //console.log(data);
                 $('#modaldelete').modal();
             });
         }
@@ -340,7 +326,7 @@
             _save.name = $('#txtName').val();
             _save.family_name = $('#txtFamilyName').val();
             _save.birth_date = $('#txtBirthDate').val();
-            _save.student_id = $('#btnsave').attr('idsave');
+            _save.student_id = $('#btnSave').attr('idSave');
             console.log(_save);
 
             $.ajax({
@@ -363,7 +349,7 @@
             _delete.name = $('#txtName').val();
             _delete.family_name = $('#txtFamilyName').val();
             _delete.birth_date = $('#txtBirthDate').val();
-            _delete.student_id = $('#btndelete').attr('iddelete');
+            _delete.student_id = $('#btnDelete').attr('idDelete');
             console.log(_delete);
 
             $.ajax({
@@ -376,7 +362,7 @@
             table = $('#example').DataTable();
             table.destroy();
 
-            $('#iddelete').remove();
+            $('#idDelete').remove();
         }
 
     </script>
@@ -405,12 +391,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnsave" onclick="saveRow()" class="btn btn-primary">ذخیره </button>
+                    <button type="button" id="btnSave" onclick="saveRow()" class="btn btn-primary">ذخیره </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                 </div>
             </div>
         </div>
     </div>
+
     <div id="modaldelete" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -435,7 +422,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btndelete" onclick="deleteRow()" class="btn btn-danger">حذف</button>
+                    <button type="button" id="btnDelete" onclick="deleteRow()" class="btn btn-danger">حذف</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                 </div>
             </div>
