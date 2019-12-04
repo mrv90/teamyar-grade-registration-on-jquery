@@ -1,0 +1,9 @@
+.git/
+.vs/
+scss/
+vendor/
+.browserslistrc
+.travis.yml
+testjson.txt
+LICENSE
+README.md
