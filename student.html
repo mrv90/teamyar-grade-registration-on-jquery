@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </li>
-                       
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo11" aria-expanded="true" aria-controls="collapseTwo11">
@@ -145,10 +145,10 @@
                 <div class="container-fluid">
 
                     <div class="card-body">
-                        <div class="row" style="    float: right !important;margin: 3px;">
-                            <div class="btn btn-success" onclick="addrecord()">
-                                <span class="fa fa-plus"></span>
-                            </div>
+                        <div class="row" style=" float: right !important;margin: 3px;">
+                            <button id="btnNew" class="btnNew btn btn-success">
+                                <span class="fa fa-plus" onclick="addRow()"></span>
+                            </button>
                             <br />
                         </div>
                         <div class="table-responsive">
@@ -235,11 +235,17 @@
 
         $(document).ready(function () {
             getDataFromServer();
+
+            $('#btnNew').click(function () {
+                $('#modalnew').modal();
+            });
         });
+
+        var baseUrl = "https://my-json-server.typicode.com/mrv90/FakeApiServer";
 
         function getDataFromServer() {
             $.ajax({
-                url: "https://my-json-server.typicode.com/mrv90/FakeApiServer/student",
+                url: baseUrl + "/student",
                 type: "Get",
                 data: {},
             }).done(function (aDemoItems) {
@@ -248,13 +254,12 @@
                 //});
                 loadTable(aDemoItems);
             });
-            
+
             //aDemoItems.forEach(item => {
             //    item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
             //});
             //loadTable(aDemoItems);
         }
-
         function loadTable(aDemoItems) {
             var table = $('#example').DataTable({
                 "data": aDemoItems,
@@ -267,7 +272,7 @@
                     "info": "نمایش _START_ از _END_ تعداد کل  _TOTAL_ آیتم",
                     "infoEmpty": "هیچ رکرودی پیدا نشد ",
                     "infoFiltered": "(فیلتر شده از _MAX_ آیتم)",
-                    "lengthMenu": "_MENU_ تعداد رکورد",
+                    "lengthMenu": "_MENU_ :تعداد رکورد",
                     "search": "جستجو:",
                     "zeroRecords": "هیچ رکوردی موجود نیست !",
                     "next": "sdsd"
@@ -280,18 +285,18 @@
                     {
                         "targets": -1,
                         "data": 1,
-                        "defaultContent": "<button id='btnEditRow' class='btnedit btn btn-success fas fa-edit'></button> <button id='btnDeleteRow' class='btnDelete btn btn-danger fas fa-trash-alt'></button>"
+                        "defaultContent": "<button id='btnEditRow' class='btnEdit btn btn-success fas fa-edit'></button> <button id='btnDeleteRow' class='btnDelete btn btn-danger fas fa-trash-alt'></button>"
                     }
                 ]
             });
 
-            $('#example tbody').on('click', 'button[class*="btnedit"]', function () {
+            $('#example tbody').on('click', 'button[class*="btnEdit"]', function () {
                 var data = table.row($(this).parents('tr')).data();
 
-                $('#txtName').val(data.name);
-                $('#txtFamilyName').val(data.family_name);
-                $('#txtBirthDate').val(data.birth_date);
-                $('#btnSave').attr('idSave', data.student_id);
+                $('#txtName-edit').val(data.name);
+                $('#txtFamilyName-edit').val(data.family_name);
+                $('#txtBirthDate-edit').val(data.birth_date);
+                $('#btnSave').attr('idEdit', data.student_id);
                 //$('#txtBirthDate').persianDatepicker({
                 //    observer: true,
                 //    val: data.birth_date,
@@ -305,9 +310,10 @@
 
             $('#example tbody').on('click', 'button[class*="btnDelete"]', function () {
                 var data = table.row($(this).parents('tr')).data();
-                $('#txtName').val(data.name);
-                $('#txtFamilyName').val(data.family_name);
-                $('#txtBirthDate').val(data.birth_date);
+
+                $('#txtName-delete').val(data.name);
+                $('#txtFamilyName-delete').val(data.family_name);
+                $('#txtBirthDate-delete').val(data.birth_date);
                 $('#btnDelete').attr('idDelete', data.student_id);
                 //$('#txtBirthDate').persianDatepicker({
                 //    observer: true,
@@ -321,16 +327,37 @@
             });
         }
 
-        function saveRow() {
+        function addRow() {
+            var _new = {};
+            _new.name = $('#txtName-new').val();
+            _new.family_name = $('#txtFamilyName-new').val();
+            _new.birth_date = $('#txtBirthDate-new').val();
+            _new.student_id = -1;
+            consol.log(_new);
+
+            $.ajax({
+                url: baseUrl + "/student/?student_id=" + _new.student_id,
+                type: "POST",
+                data: _save,
+            }).done(function (result) {
+                _new: result
+            });
+
+            $('#modalnew').modal('hide');
+            table = $('#example').DataTable();
+            table.destroy();
+            loadTable();
+        }
+        function editRow() {
             var _save = {};
-            _save.name = $('#txtName').val();
-            _save.family_name = $('#txtFamilyName').val();
-            _save.birth_date = $('#txtBirthDate').val();
-            _save.student_id = $('#btnSave').attr('idSave');
+            _save.name = $('#txtName-edit').val();
+            _save.family_name = $('#txtFamilyName-edit').val();
+            _save.birth_date = $('#txtBirthDate-edit').val();
+            _save.student_id = $('#btnSave').attr('idEdit');
             console.log(_save);
 
             $.ajax({
-                url: "/student",
+                url: baseUrl + "/student/?student_id=" + _edit.student_id,
                 type: "POST",
                 data: _save,
             }).done(function (result) {
@@ -343,17 +370,16 @@
             table.destroy();
             loadTable();
         }
-
         function deleteRow() {
             var _delete = {};
-            _delete.name = $('#txtName').val();
-            _delete.family_name = $('#txtFamilyName').val();
-            _delete.birth_date = $('#txtBirthDate').val();
+            _delete.name = $('#txtName-delete').val();
+            _delete.family_name = $('#txtFamilyName-delete').val();
+            _delete.birth_date = $('#txtBirthDate-delete').val();
             _delete.student_id = $('#btnDelete').attr('idDelete');
             console.log(_delete);
 
             $.ajax({
-                url: "/student/?student_id=" + _delete.student_id,
+                url: baseUrl + "/student/?student_id=" + _delete.student_id,
                 type: "DELETE",
                 data: _delete,
             });
@@ -379,19 +405,19 @@
                 <div class="modal-body">
                     <div class="md-form mb-4">
                         <label data-error="wrong" data-success="right" for="txtName" class="">نام </label>
-                        <input id="txtName" class="form-control validate">
+                        <input id="txtName-edit" class="form-control validate">
                     </div>
                     <div class="md-form mb-4">
                         <label data-error="wrong" data-success="right" for="txtFamilyName">نام خانوادگی </label>
-                        <input id="txtFamilyName" class="form-control validate">
+                        <input id="txtFamilyName-edit" class="form-control validate">
                     </div>
                     <div class="md-form mb-4">
                         <label data-error="wrong" data-success="right" for="txtBirthDate"> تاریخ تولد </label>
-                        <input id="txtBirthDate" class="form-control validate">
+                        <input id="txtBirthDate-edit" class="form-control validate">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnSave" onclick="saveRow()" class="btn btn-primary">ذخیره </button>
+                    <button type="button" id="btnSave" onclick="editRow()" class="btn btn-primary">ویرایش </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                 </div>
             </div>
@@ -410,19 +436,50 @@
                 <div class="modal-body">
                     <div class="md-form mb-4">
                         <label data-error="wrong" data-success="right" for="txtName" class="">نام</label>
-                        <input id="txtName" class="form-control validate" readonly>
+                        <input id="txtName-delete" class="form-control validate" readonly>
                     </div>
                     <div class="md-form mb-4">
                         <label data-error="wrong" data-success="right" for="txtFamilyName">نام خانوادگی</label>
-                        <input id="txtFamilyName" class="form-control validate" readonly>
+                        <input id="txtFamilyName-delete" class="form-control validate" readonly>
                     </div>
                     <div class="md-form mb-4">
                         <label data-error="wrong" data-success="right" for="txtBirthDate">تاریخ تولد</label>
-                        <input id="txtBirthDate" class="form-control validate" readonly>
+                        <input id="txtBirthDate-delete" class="form-control validate" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="btnDelete" onclick="deleteRow()" class="btn btn-danger">حذف</button>
+                    <button type="button" id="btnDelete" onclick="deleteRow()" class="btn btn-primary">حذف</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalnew" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">مشخصات دانش‌آموز جدید</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="md-form mb-4">
+                        <label data-error="wrong" data-success="right" for="txtName" class="">نام</label>
+                        <input id="txtName-new" class="form-control validate">
+                    </div>
+                    <div class="md-form mb-4">
+                        <label data-error="wrong" data-success="right" for="txtFamilyName">نام خانوادگی</label>
+                        <input id="txtFamilyName-new" class="form-control validate">
+                    </div>
+                    <div class="md-form mb-4">
+                        <label data-error="wrong" data-success="right" for="txtBirthDate">تاریخ تولد</label>
+                        <input id="txtBirthDate-new" class="form-control validate">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnNew" onclick="addRow()" class="btn btn-primary">ایجاد</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
                 </div>
             </div>
