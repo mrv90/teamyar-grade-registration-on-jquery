@@ -234,16 +234,16 @@
 
         var aDemoItems = [
             {
-                "ID": 1,
-                "firstName": "x1",
-                "lastName": "yLanTest101",
-                "birthdate": "10/16/2020",
+                "student_id": 1,
+                "name": "ناصر",
+                "family_name": "علوی",
+                "birth_date": "10/16/2020",
             },
             {
-                "ID": 2,
-                "firstName": "x2",
-                "lastName": "22",
-                "birthdate": "10/16/2020",
+                "student_id": 2,
+                "name": "سپنتا",
+                "family_name": "شاهی",
+                "birth_date": "10/16/2020",
             },];
 
         $(document).ready(function () {
@@ -257,13 +257,13 @@
             //    data: {},
             //}).done(function (aDemoItems) {
             //    aDemoItems.forEach(item => {
-            //        item.farsidate = new Date(item.birthdate).toLocaleDateString('fa-IR');
+            //        item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
             //    });
             //    loadTable(aDemoItems);
             //});
 
             aDemoItems.forEach(item => {
-                item.farsidate = new Date(item.birthdate).toLocaleDateString('fa-IR');
+                item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
             });
             loadTable(aDemoItems);
         }
@@ -287,9 +287,9 @@
                 },
                 "columns": [
 
-                    { "data": "firstName", 'title': 'نام' },
-                    { "data": "lastName", 'title': 'نام خانوادگی' },
-                    { "data": "farsidate", 'title': 'تاریخ تولد' },
+                    { "data": "name", 'title': 'نام' },
+                    { "data": "family_name", 'title': 'نام خانوادگی' },
+                    { "data": "birth_date", 'title': 'تاریخ تولد' },
                     {
                         "targets": -1,
                         "data": 1,
@@ -299,17 +299,16 @@
             });
 
             $('#example tbody').on('click', 'button[class*="btnedit"]', function () {
-           // $('#btnEditRow').click(function () {
                 var data = table.row($(this).parents('tr')).data();
                 console.log(data);
 
-                $('#txtName').val(data.firstName);
-                $('#txtFamily').val(data.lastName);
-                $('#txtbirthdate').val(data.birthdate);
-                $('#btnsave').attr('idsave', data.ID);
-                $('#txtbirthdate').persianDatepicker({
+                $('#txtName').val(data.name);
+                $('#txtFamilyName').val(data.family_name);
+                $('#txtBirthDate').val(data.birth_date);
+                $('#btnsave').attr('idsave', data.student_id);
+                $('#txtBirthDate').persianDatepicker({
                     observer: true,
-                    val: data.birthdate,
+                    val: data.birth_date,
                     format: 'YYYY/MM/DD',
                     altField: '.observer-example-alt'
                 });
@@ -317,18 +316,17 @@
                 $('#modaledit').modal();
             });
 
-          //btndelete   $('#btnDeleteRow').click(function () {
             $('#example tbody').on('click', 'button[class*="btndelete"]', function () {
                 var data = table.row($(this).parents('tr')).data();
                 console.log(data);
 
-                $('#txtName').val(data.firstName);
-                $('#txtFamily').val(data.lastName);
-                $('#txtbirthdate').val(data.birthdate);
-                $('#btndelete').attr('iddelete', data.ID);
-                $('#txtbirthdate').persianDatepicker({
+                $('#txtName').val(data.name);
+                $('#txtFamilyName').val(data.family_name);
+                $('#txtBirthDate').val(data.birth_date);
+                $('#btndelete').attr('iddelete', data.student_id);
+                $('#txtBirthDate').persianDatepicker({
                     observer: true,
-                    val: data.birthdate,
+                    val: data.birth_date,
                     format: 'YYYY/MM/DD',
                     altField: '.observer-example-alt'
                 });
@@ -339,10 +337,10 @@
 
         function saveRow() {
             var _save = {};
-            _save.firstName = $('#txtName').val();
-            _save.lastName = $('#txtFamily').val();
-            _save.birthdate = $('#txtbirthdate').val();
-            _save.ID = $('#btnsave').attr('idsave');
+            _save.name = $('#txtName').val();
+            _save.family_name = $('#txtFamilyName').val();
+            _save.birth_date = $('#txtBirthDate').val();
+            _save.student_id = $('#btnsave').attr('idsave');
             console.log(_save);
 
             $.ajax({
@@ -362,14 +360,14 @@
 
         function deleteRow() {
             var _delete = {};
-            _delete.firstName = $('#txtName').val();
-            _delete.lastName = $('#txtFamily').val();
-            _delete.birthdate = $('#txtbirthdate').val();
-            _delete.ID = $('#btndelete').attr('iddelete');
+            _delete.name = $('#txtName').val();
+            _delete.family_name = $('#txtFamilyName').val();
+            _delete.birth_date = $('#txtBirthDate').val();
+            _delete.student_id = $('#btndelete').attr('iddelete');
             console.log(_delete);
 
             $.ajax({
-                url: "/student/?student_id=" + _delete.ID,
+                url: "/student/?student_id=" + _delete.student_id,
                 type: "DELETE",
                 data: _delete,
             });
@@ -398,12 +396,12 @@
                         <input id="txtName" class="form-control validate">
                     </div>
                     <div class="md-form mb-4">
-                        <label data-error="wrong" data-success="right" for="txtFamily">نام خانوادگی </label>
-                        <input id="txtFamily" class="form-control validate">
+                        <label data-error="wrong" data-success="right" for="txtFamilyName">نام خانوادگی </label>
+                        <input id="txtFamilyName" class="form-control validate">
                     </div>
                     <div class="md-form mb-4">
-                        <label data-error="wrong" data-success="right" for="txtbirthdate"> تاریخ تولد </label>
-                        <input id="txtbirthdate" class="form-control validate">
+                        <label data-error="wrong" data-success="right" for="txtBirthDate"> تاریخ تولد </label>
+                        <input id="txtBirthDate" class="form-control validate">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -428,12 +426,12 @@
                         <input id="txtName" class="form-control validate" readonly>
                     </div>
                     <div class="md-form mb-4">
-                        <label data-error="wrong" data-success="right" for="txtFamily">نام خانوادگی</label>
-                        <input id="txtFamily" class="form-control validate" readonly>
+                        <label data-error="wrong" data-success="right" for="txtFamilyName">نام خانوادگی</label>
+                        <input id="txtFamilyName" class="form-control validate" readonly>
                     </div>
                     <div class="md-form mb-4">
-                        <label data-error="wrong" data-success="right" for="txtbirthdate">تاریخ تولد</label>
-                        <input id="txtbirthdate" class="form-control validate" readonly>
+                        <label data-error="wrong" data-success="right" for="txtBirthDate">تاریخ تولد</label>
+                        <input id="txtBirthDate" class="form-control validate" readonly>
                     </div>
                 </div>
                 <div class="modal-footer">
