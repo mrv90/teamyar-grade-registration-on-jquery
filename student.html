@@ -60,7 +60,7 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="Course.html">دروس</a>
+                        <a class="collapse-item" href="course.html">دروس</a>
                         <a class="collapse-item" href="student.html">دانشجو</a>
                         <a class="collapse-item" href="class.html">کلاس</a>
                     </div>
@@ -75,7 +75,7 @@
                 </a>
                 <div id="collapseTwo11" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="exam.html">آزمون</a>
+                        <a class="collapse-item" href="quiz.html">آزمون</a>
                         <a class="collapse-item" href="result.html">نمرات</a>
                     </div>
                 </div>
@@ -117,18 +117,18 @@
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="profile.html">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="settings.html">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                <!--<a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
-                                </a>
+                                </a>-->
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -184,12 +184,12 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">می خواهید خارج شوید  ؟</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">می خواهید خارج شوید؟</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">لطفا برای خارج شدهن از سیستم دکمه خروج را بفشارید</div>
+                <div class="modal-body">لطفا برای خارج شدن از سیستم دکمه خروج را بفشارید</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">انصراف</button>
                     <a class="btn btn-primary" href="login.html">خروج</a>
@@ -219,19 +219,19 @@
     <!-- Page level custom scripts -->
     <script>
 
-        //var aDemoItems = [
-        //    {
-        //        "student_id": 1,
-        //        "name": "ناصر",
-        //        "family_name": "علوی",
-        //        "birth_date": "10/16/2020",
-        //    },
-        //    {
-        //        "student_id": 2,
-        //        "name": "سپنتا",
-        //        "family_name": "شاهی",
-        //        "birth_date": "10/16/2020",
-        //    },];
+        var aDemoItems = [
+            {
+                "student_id": 1,
+                "name": "ناصر",
+                "family_name": "علوی",
+                "birth_date": "1370/01/01",
+            },
+            {
+                "student_id": 2,
+                "name": "سپنتا",
+                "family_name": "شاهی",
+                "birth_date": "1380/02/20",
+            },];
 
         $(document).ready(function () {
             getDataFromServer();
@@ -255,9 +255,7 @@
                 loadTable(aDemoItems);
             });
 
-            //aDemoItems.forEach(item => {
-            //    item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
-            //});
+            // uncomment to work using sample data
             //loadTable(aDemoItems);
         }
         function loadTable(aDemoItems) {
@@ -296,15 +294,14 @@
                 $('#txtName-edit').val(data.name);
                 $('#txtFamilyName-edit').val(data.family_name);
                 $('#txtBirthDate-edit').val(data.birth_date);
-                $('#btnSave').attr('idEdit', data.student_id);
-                //$('#txtBirthDate').persianDatepicker({
-                //    observer: true,
-                //    val: data.birth_date,
-                //    format: 'YYYY/MM/DD',
-                //    altField: '.observer-example-alt'
+                //$('#txtBirthDate-edit').persianDatepicker({
+                //    initialValueType: 'persian',
+                //    initialValue: true,
+                //    value: data.birth_date,
+                //    format: 'YYYY/MM/DD'
                 //});
+                $('#btnSave').attr('idEdit', data.student_id);
 
-                //console.log(data);
                 $('#modaledit').modal();
             });
 
@@ -315,14 +312,12 @@
                 $('#txtFamilyName-delete').val(data.family_name);
                 $('#txtBirthDate-delete').val(data.birth_date);
                 $('#btnDelete').attr('idDelete', data.student_id);
-                //$('#txtBirthDate').persianDatepicker({
-                //    observer: true,
+                //$('#txtBirthDate-delete').persianDatepicker({
+                //    initialValueType: 'persian',
                 //    val: data.birth_date,
-                //    format: 'YYYY/MM/DD',
-                //    altField: '.observer-example-alt'
+                //    format: 'YYYY/MM/DD'
                 //});
 
-                //console.log(data);
                 $('#modaldelete').modal();
             });
         }
@@ -333,20 +328,22 @@
             _new.family_name = $('#txtFamilyName-new').val();
             _new.birth_date = $('#txtBirthDate-new').val();
             _new.student_id = -1;
-            consol.log(_new);
+
+            data = $('#example').DataTable();
 
             $.ajax({
                 url: baseUrl + "/student/?student_id=" + _new.student_id,
                 type: "POST",
-                data: _save,
+                body: _new
             }).done(function (result) {
-                _new: result
+                data.add(result);
+                console.log(data);
+
+                $('#modalnew').modal('hide');
+                loadTable(data);
             });
 
-            $('#modalnew').modal('hide');
-            table = $('#example').DataTable();
-            table.destroy();
-            loadTable();
+            //data.destroy();
         }
         function editRow() {
             var _save = {};
@@ -397,7 +394,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">اطلاعات دانش آموز </h5>
+                    <h5 class="modal-title">اطلاعات دانشجو</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -428,7 +425,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">تایید حذف دانش‌آموز</h5>
+                    <h5 class="modal-title">تایید حذف دانشجو</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -459,7 +456,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">مشخصات دانش‌آموز جدید</h5>
+                    <h5 class="modal-title">مشخصات دانشجوی جدید</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
