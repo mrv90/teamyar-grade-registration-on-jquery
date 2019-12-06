@@ -142,10 +142,20 @@
                 </nav>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" style="width: 400px">
 
+                    <div class="md-form mb-4">
+                        <label data-error="wrong" data-success="right" for="txtFamilyName">آدرس میزبان:</label>
+                        <input id="txtHost" class="form-control validate">
+                    </div>
+                    <div class="md-form mb-4">
+                        <label data-error="wrong" data-success="right" for="txtBirthDate">پورت:</label>
+                        <input id="txtPort" class="form-control validate">
+                    </div>
+                    <div>
+                        <button type="button" onclick="updateBaseUrl()" class="btn btn-primary fas fa-edit"></button>
+                    </div>
 
-                    
                 </div>
                 <!-- /.container-fluid -->
             </div>
@@ -210,46 +220,22 @@
     <!-- Page level custom scripts -->
     <script>
 
-        //var aDemoItems = [
-        //    {
-        //        "student_id": 1,
-        //        "name": "ناصر",
-        //        "family_name": "علوی",
-        //        "birth_date": "1370/01/01",
-        //    },
-        //    {
-        //        "student_id": 2,
-        //        "name": "سپنتا",
-        //        "family_name": "شاهی",
-        //        "birth_date": "1380/02/20",
-        //    },];
+        $(document).ready(function () {
+            readBaseUrl();
+        });
 
-        //$(document).ready(function () {
-        //    getDataFromServer();
+        function readBaseUrl() {
+            $('#txtHost').val(window.localStorage.getItem('host'));
+            $('#txtPort').val(window.localStorage.getItem('port'));
+        }
 
-        //    $('#btnNew').click(function () {
-        //        $('#modalnew').modal();
-        //    });
-        //});
+        function updateBaseUrl() {
+            window.localStorage.setItem('host', $('#txtHost').val());
+            window.localStorage.setItem('port', $('#txtPort').val());
 
-        //var baseUrl = "https://my-json-server.typicode.com/mrv90/FakeApiServer";
-
-        //function getDataFromServer() {
-        //    $.ajax({
-        //        url: baseUrl + "/student",
-        //        type: "Get",
-        //        data: {},
-        //    }).done(function (aDemoItems) {
-        //        //aDemoItems.forEach(item => {
-        //        //    item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
-        //        //});
-        //        loadTable(aDemoItems);
-        //    });
-
-        //    // uncomment to work using sample data
-        //    //loadTable(aDemoItems);
-        //}
-
+            alert('آدرس میزبان و پورت بروزرسانی شد.');
+            readBaseUrl();
+        }
 
     </script>
 
