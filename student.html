@@ -146,9 +146,9 @@
 
                     <div class="card-body">
                         <div class="row" style=" float: right !important;margin: 3px;">
-                            <button id="btnNew" class="btnNew btn btn-success">
-                                <span class="fa fa-plus" onclick="addRow()"></span>
-                            </button>
+                            <div id="btnNew" class="btnNew btn btn-success">
+                                <span class="fa fa-plus" ></span>
+                            </div>
                             <br />
                         </div>
                         <div class="table-responsive">
@@ -237,6 +237,7 @@
             getDataFromServer();
 
             $('#btnNew').click(function () {
+                //TODO تمام تکست باکس‌ها خالی شود
                 $('#modalnew').modal();
             });
         });
@@ -323,13 +324,19 @@
         }
 
         function addRow() {
+            let data = $('#example').DataTable().rows().data().toArray();
+
             var _new = {};
             _new.name = $('#txtName-new').val();
             _new.family_name = $('#txtFamilyName-new').val();
             _new.birth_date = $('#txtBirthDate-new').val();
-            _new.student_id = -1;
+            _new.student_id = data.length+1;
 
-            data = $('#example').DataTable();
+            table = $('#example').DataTable()
+            table.destroy();
+            data.push(_new);
+            $('#modalnew').modal('hide');
+            loadTable(data);
 
             $.ajax({
                 url: baseUrl + "/student/?student_id=" + _new.student_id,
@@ -343,7 +350,7 @@
                 loadTable(data);
             });
 
-            //data.destroy();
+            data.destroy();
         }
         function editRow() {
             var _save = {};
