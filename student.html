@@ -219,6 +219,7 @@
     <!-- Page level custom scripts -->
     <script>
 
+        var baseUrl = '';
         var aDemoItems = [
             {
                 "student_id": 1,
@@ -234,6 +235,10 @@
             },];
 
         $(document).ready(function () {
+            //baseUrl = "https://my-json-server.typicode.com/mrv90/FakeApiServer";
+            baseUrl = 'http://' + window.localStorage.getItem('host') + ':' + window.localStorage.getItem('port');
+            console.log(baseUrl);
+
             getDataFromServer();
 
             $('#btnNew').click(function () {
@@ -242,14 +247,14 @@
             });
         });
 
-        var baseUrl = "https://my-json-server.typicode.com/mrv90/FakeApiServer";
 
         function getDataFromServer() {
             $.ajax({
                 url: baseUrl + "/student",
-                type: "Get",
+                type: "GET",
                 data: {},
             }).done(function (aDemoItems) {
+                console.log(aDemoItems);
                 //aDemoItems.forEach(item => {
                 //    item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
                 //});
@@ -338,19 +343,19 @@
             $('#modalnew').modal('hide');
             loadTable(data);
 
-            $.ajax({
-                url: baseUrl + "/student/?student_id=" + _new.student_id,
-                type: "POST",
-                body: _new
-            }).done(function (result) {
-                data.add(result);
-                console.log(data);
+            //$.ajax({
+            //    url: baseUrl + "/student/?student_id=" + _new.student_id,
+            //    type: "POST",
+            //    body: _new
+            //}).done(function (result) {
+            //    data.add(result);
+            //    console.log(data);
 
-                $('#modalnew').modal('hide');
-                loadTable(data);
-            });
+            //    $('#modalnew').modal('hide');
+            //    loadTable(data);
+            //});
 
-            data.destroy();
+            //data.destroy();
         }
         function editRow() {
             var _save = {};
