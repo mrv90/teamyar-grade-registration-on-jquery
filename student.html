@@ -237,9 +237,11 @@
         $(document).ready(function () {
             //baseUrl = "https://my-json-server.typicode.com/mrv90/FakeApiServer";
             baseUrl = 'http://' + window.localStorage.getItem('host') + ':' + window.localStorage.getItem('port');
-            console.log(baseUrl);
 
-            getDataFromServer();
+            if (window.localStorage.getItem('host') && window.localStorage.getItem('port'))
+                getDataFromServer();
+            else
+                alert('با مراجعه به تنظیمات، آدرس و پورت سرور را تعریف کنید.');
 
             $('#btnNew').click(function () {
                 //TODO تمام تکست باکس‌ها خالی شود
@@ -247,23 +249,25 @@
             });
         });
 
-
         function getDataFromServer() {
             $.ajax({
                 url: baseUrl + "/student",
                 type: "GET",
+                //dataType: 'jsonp',
+                //headers: {
+                //    header: "Access-Control-Allow-Origin",
+                //    val: "localhost"
+                //},
                 data: {},
             }).done(function (aDemoItems) {
-                console.log(aDemoItems);
-                //aDemoItems.forEach(item => {
-                //    item.farsidate = new Date(item.birth_date).toLocaleDateString('fa-IR');
-                //});
+                
                 loadTable(aDemoItems);
             });
 
             // uncomment to work using sample data
             //loadTable(aDemoItems);
         }
+
         function loadTable(aDemoItems) {
             var table = $('#example').DataTable({
                 "data": aDemoItems,
@@ -329,75 +333,69 @@
         }
 
         function addRow() {
-            let data = $('#example').DataTable().rows().data().toArray();
-
             var _new = {};
             _new.name = $('#txtName-new').val();
             _new.family_name = $('#txtFamilyName-new').val();
             _new.birth_date = $('#txtBirthDate-new').val();
-            _new.student_id = data.length+1;
-
-            table = $('#example').DataTable()
-            table.destroy();
-            data.push(_new);
-            $('#modalnew').modal('hide');
-            loadTable(data);
-
-            //$.ajax({
-            //    url: baseUrl + "/student/?student_id=" + _new.student_id,
-            //    type: "POST",
-            //    body: _new
-            //}).done(function (result) {
-            //    data.add(result);
-            //    console.log(data);
-
-            //    $('#modalnew').modal('hide');
-            //    loadTable(data);
-            //});
-
-            //data.destroy();
+            _new.student_id = -1;
+            $.ajax({
+                url: baseUrl + "/student/?student_id=" + _new.student_id + "&name=" + _new.name + "&family_name=" + _new.family_name + "&birth_date=" + _new.birth_date ,
+                type: "POST",
+                crossDomain: true
+            }).done(function (result) {
+                _new.student_id = result;
+                $('#example').DataTable().row.add(_new).draw();
+                $('#txtName-new').val("");
+                $('#txtFamilyName-new').val("");
+                $('#txtBirthDate-new').val("");
+                $('#modalnew').modal('hide');
+            });
         }
+
         function editRow() {
             var _save = {};
             _save.name = $('#txtName-edit').val();
             _save.family_name = $('#txtFamilyName-edit').val();
             _save.birth_date = $('#txtBirthDate-edit').val();
             _save.student_id = $('#btnSave').attr('idEdit');
-            console.log(_save);
 
             $.ajax({
-                url: baseUrl + "/student/?student_id=" + _edit.student_id,
-                type: "POST",
-                data: _save,
-            }).done(function (result) {
-                _save: result
+                type: "PUT",
+                url: baseUrl + "/student/?student_id=" + _save.student_id,
+                data: JSON.stringify(_save),
+                dataType: 'json',
+                crossDomain: true,
+                contentType: 'application/json'
+            }).done(function () {
+                $('#example').DataTable().row($(this).data(_save)).draw();
             });
-            console.log(_save);
 
             $('#modaledit').modal('hide');
             table = $('#example').DataTable();
             table.destroy();
             loadTable();
         }
+
         function deleteRow() {
             var _delete = {};
             _delete.name = $('#txtName-delete').val();
             _delete.family_name = $('#txtFamilyName-delete').val();
             _delete.birth_date = $('#txtBirthDate-delete').val();
             _delete.student_id = $('#btnDelete').attr('idDelete');
-            console.log(_delete);
 
             $.ajax({
-                url: baseUrl + "/student/?student_id=" + _delete.student_id,
                 type: "DELETE",
-                data: _delete,
+                url: baseUrl + "/student/?student_id=" + _delete.student_id,
+                crossDomain: true
+            }).done(function (result) {
+                $('#example').DataTable().row(this).remove().draw();
+
+                $('#txtName-delete').val("");
+                $('#txtFamilyName-delete').val("");
+                $('#txtBirthDate-delete').val("");
+
+                $('#modaldelete').modal('hide');
             });
-
-            $('#modaldelete').modal('hide');
-            table = $('#example').DataTable();
-            table.destroy();
-
-            $('#idDelete').remove();
         }
 
     </script>
