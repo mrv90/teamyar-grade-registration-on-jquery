@@ -253,11 +253,6 @@
             $.ajax({
                 url: baseUrl + "/student",
                 type: "GET",
-                //dataType: 'jsonp',
-                //headers: {
-                //    header: "Access-Control-Allow-Origin",
-                //    val: "localhost"
-                //},
                 data: {},
             }).done(function (aDemoItems) {
                 
@@ -269,6 +264,7 @@
         }
 
         function loadTable(aDemoItems) {
+            console.log(aDemoItems);
             var table = $('#example').DataTable({
                 "data": aDemoItems,
                 "language": {
@@ -311,7 +307,7 @@
                 //    format: 'YYYY/MM/DD'
                 //});
                 $('#btnSave').attr('idEdit', data.student_id);
-
+                console.log(data);
                 $('#modaledit').modal();
             });
 
@@ -333,7 +329,7 @@
         }
 
         function addRow() {
-            var _new = {};
+            let _new = {};
             _new.name = $('#txtName-new').val();
             _new.family_name = $('#txtFamilyName-new').val();
             _new.birth_date = $('#txtBirthDate-new').val();
@@ -343,8 +339,9 @@
                 type: "POST",
                 crossDomain: true
             }).done(function (result) {
-                _new.student_id = result;
+                _new.student_id = result["student_id"];
                 $('#example').DataTable().row.add(_new).draw();
+                console.log(_new);
                 $('#txtName-new').val("");
                 $('#txtFamilyName-new').val("");
                 $('#txtBirthDate-new').val("");
@@ -353,36 +350,35 @@
         }
 
         function editRow() {
-            var _save = {};
+            let _save = {};
             _save.name = $('#txtName-edit').val();
             _save.family_name = $('#txtFamilyName-edit').val();
             _save.birth_date = $('#txtBirthDate-edit').val();
             _save.student_id = $('#btnSave').attr('idEdit');
-
+            //console.log('before ajax:', _save);
             $.ajax({
                 type: "PUT",
                 url: baseUrl + "/student/?student_id=" + _save.student_id,
                 data: JSON.stringify(_save),
-                dataType: 'json',
+                //dataType: 'json',
                 crossDomain: true,
                 contentType: 'application/json'
             }).done(function () {
-                $('#example').DataTable().row($(this).data(_save)).draw();
+                console.log('.done:', _save);
+                $('#example').DataTable().row(this).data(_save).draw();
+                //$('#example').DataTable().row($(this).data(_save)).draw();
             });
 
             $('#modaledit').modal('hide');
-            table = $('#example').DataTable();
-            table.destroy();
-            loadTable();
         }
 
         function deleteRow() {
-            var _delete = {};
+            let _delete = {};
             _delete.name = $('#txtName-delete').val();
             _delete.family_name = $('#txtFamilyName-delete').val();
             _delete.birth_date = $('#txtBirthDate-delete').val();
             _delete.student_id = $('#btnDelete').attr('idDelete');
-
+            console.log(_delete);
             $.ajax({
                 type: "DELETE",
                 url: baseUrl + "/student/?student_id=" + _delete.student_id,
