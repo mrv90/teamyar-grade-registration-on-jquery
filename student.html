@@ -362,7 +362,10 @@
                 data: JSON.stringify(_save),
                 //dataType: 'json',
                 crossDomain: true,
-                contentType: 'application/json'
+                contentType: 'application/json',
+                error: function (jq, status, message) {
+                    alert('A jQuery error has occurred. Status: ' + status + ' - Message: ' + message);
+                }
             }).done(function () {
                 console.log('.done:', _save);
                 $('#example').DataTable().row(this).data(_save).draw();
@@ -382,7 +385,10 @@
             $.ajax({
                 type: "DELETE",
                 url: baseUrl + "/student/?student_id=" + _delete.student_id,
-                crossDomain: true
+                crossDomain: true,
+                error: function (jq, status, message) {
+                    alert('A jQuery error has occurred. Status: ' + status + ' - Message: ' + message);
+                }
             }).done(function (result) {
                 $('#example').DataTable().row(this).remove().draw();
 
